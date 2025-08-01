@@ -41,10 +41,14 @@ const displayCategories = (categories) => {
     categories.forEach(element => {
         const buttonContainer = document.createElement("div");
         buttonContainer.innerHTML = `
-        <button class="btn w-[312px] lg:w-[300px] md:w-[155px] h-[104px] rounded-xl">
+        <button onclick="loadCategoryPets('${element.category.toLowerCase()}')" id="btn-${element.category.toLowerCase()}" class="btn w-[312px] lg:w-[300px] md:w-[155px] h-[104px] rounded-xl">
         <div class="flex items-center gap-4">
-        <img src="${element.category_icon}" alt="${element.category}" class="h-[56px]">
-        <span class="text-2xl font-bold">${element.category}</span>
+        <img src="${element.category_icon}" alt="${
+          element.category
+        }" class="h-[56px]">
+        <span class="md:text-xl lg:text-2xl text-2xl font-bold">${
+          element.category
+        }</span>
         </div></button>
         `;
 
@@ -83,44 +87,55 @@ const loadPets = () => {
 const displayPets = (pets) =>{
     // console.log(pets);
     const petContainer = document.getElementById("pets");
+    petContainer.innerHTML = "";
+    if(pets.length == 0){
+      petContainer.classList.remove("grid");
+      petContainer.innerHTML = `
+        <div class="flex flex-col items-center text-center gap-8">
+    <img src="images/error.webp" alt="" srcset="">
+    <h1 class="text-5xl font-extrabold">No Information Available</h1>
+    <h4 class="w-[60%]">It is a long established fact that a reader will be distracted by the readable content of a page when looking at
+    its layout. The point of using Lorem Ipsum is that it has a.</h4>
+</div>
+      `;
+    }
+    else{
+      petContainer.classList.add("grid");
+    }
     pets.forEach(element => {
         const card = document.createElement("div");
         card.innerHTML = `
         <div class="card w-full bg-base-100 shadow-sm">
   <div class="card-body">
-    <span class="badge badge-xs badge-warning">Most Popular</span>
+    <img class="rounded-xl" src=${element.image} />
     <div class="flex justify-between">
-      <h2 class="text-3xl font-bold">Premium</h2>
-      <span class="text-xl">$29/mo</span>
+      <h2 class="text-3xl font-bold">${element.pet_name}</h2>
+      
     </div>
     <ul class="mt-6 flex flex-col gap-2 text-xs">
-      <li>
-        <svg xmlns="http://www.w3.org/2000/svg" class="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-        <span>High-resolution image generation</span>
+      <li class="flex items-center gap-4">
+        <img class="h-[20px]" src="images/category.png"/>
+        <p class="text-[16px]">${element.breed}</p>
       </li>
-      <li>
-        <svg xmlns="http://www.w3.org/2000/svg" class="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-        <span>Customizable style templates</span>
+      <li class="flex items-center gap-4">
+        <img class="h-[20px]" src="images/dob.png"/>
+        <p class="text-[16px]">${element.date_of_birth}</p>
       </li>
-      <li>
-        <svg xmlns="http://www.w3.org/2000/svg" class="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-        <span>Batch processing capabilities</span>
+      <li class="flex items-center gap-4">
+        <img class="h-[20px]" src="images/gender.png"/>
+        <p class="text-[16px]">${element.gender}</p>
       </li>
-      <li>
-        <svg xmlns="http://www.w3.org/2000/svg" class="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-        <span>AI-driven image enhancements</span>
+      <li class="flex items-center gap-4">
+        <img class="h-[20px]" src="images/price.png"/>
+        <p class="text-[16px]">${element.price}$</p>
       </li>
-      <li class="opacity-50">
-        <svg xmlns="http://www.w3.org/2000/svg" class="size-4 me-2 inline-block text-base-content/50" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-        <span class="line-through">Seamless cloud integration</span>
-      </li>
-      <li class="opacity-50">
-        <svg xmlns="http://www.w3.org/2000/svg" class="size-4 me-2 inline-block text-base-content/50" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-        <span class="line-through">Real-time collaboration tools</span>
-      </li>
+      
     </ul>
-    <div class="mt-6">
-      <button class="btn btn-primary btn-block">Subscribe</button>
+    <hr class="text-black/10 mt-4">
+    <div class="mt-4 flex justify-between">
+      <button class="btn rounded-lg "><img class="scale-50" src="images/like.png"></button>
+      <button id="adopt" class="card-btn btn rounded-lg text-[rgba(14,122,129,1)] font-bold">Adopt</button>
+      <button onclick="loadDetails('${element.petId}')" id="details" class="card-btn btn rounded-lg text-[rgba(14,122,129,1)] font-bold">Details</button>
     </div>
   </div>
 </div>
@@ -130,3 +145,29 @@ const displayPets = (pets) =>{
 }
 
 loadPets();
+
+// loadCategoryPets
+const loadCategoryPets = (category) =>{
+  fetch(`https://openapi.programming-hero.com/api/peddy/category/${category}`)
+    .then((res) => res.json())
+    .then((data) => {
+      const allBtns = document.querySelectorAll("#categories button");
+      allBtns.forEach((btn) => {
+        btn.classList.remove(
+          "bg-[rgba(14,122,129,1)]",
+          "text-white",
+          "rounded-full"
+        );
+      });
+
+      const activeBtn = document.getElementById(`btn-${category}`);
+      activeBtn.classList.add("bg-[rgba(14,122,129,1)]");
+      activeBtn.classList.add("text-white");
+      activeBtn.classList.remove("rounded-xl"); 
+      activeBtn.classList.add("rounded-full");
+      displayPets(data.data)
+    })
+    .catch((err) => console.log(err));
+}
+
+
