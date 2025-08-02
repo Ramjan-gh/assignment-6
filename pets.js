@@ -134,8 +134,8 @@ const displayPets = (pets) =>{
     <hr class="text-black/10 mt-4">
     <div class="mt-4 flex justify-between">
       <button class="btn rounded-lg "><img class="scale-50" src="images/like.png"></button>
-      <button id="adopt" class="card-btn btn rounded-lg text-[rgba(14,122,129,1)] font-bold">Adopt</button>
-      <button onclick="loadDetails('${element.petId}')" id="details" class="card-btn btn rounded-lg text-[rgba(14,122,129,1)] font-bold">Details</button>
+      <button class="btn rounded-lg text-[rgba(14,122,129,1)] font-bold">Adopt</button>
+      <button onclick="loadDetails(element.petId)" id="details" class="btn rounded-lg text-[rgba(14,122,129,1)] font-bold">Details</button>
     </div>
   </div>
 </div>
@@ -169,5 +169,19 @@ const loadCategoryPets = (category) =>{
     })
     .catch((err) => console.log(err));
 }
+
+
+// loadDetails
+const loadDetails = (id) =>{
+  fetch(`https://openapi.programming-hero.com/api/peddy/pet/${id}`)
+    .then((res) => res.json())
+    .then((data) => displayDetails(data.petData))
+    .catch((err) => console.log(err));
+}
+
+const displayDetails = (id) => {
+  console.log(id.pet_details);
+}
+
 
 
