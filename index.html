@@ -95,10 +95,11 @@
          </div>
 
          <!-- cards -->
-          <div class="w-full flex flex-col lg:flex-row justify-between">
-            <div class="w-full lg:w-[74%] grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3" id="pets"></div>
-            <div id="liked" class="w-full lg:w-[25%]"> 
-                <div id="liked-div" class="card w-full h-full bg-green-300 shadow-sm card-body"></div>
+          <div class="w-full flex flex-col lg:flex-row justify-between items-start">
+            <div class="w-full lg:w-[74%] grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 md:border-r-2 border-black/10 pr-8" id="pets"></div>
+            <div id="liked" class="w-full lg:w-[25%] border-r-2 md:border-green-500/50"> 
+                <p class="text-4xl font-bold justify-self-center md:border-b-2 border-green-500/50">Liked Pets</p>
+                <div id="liked-div" class="card w-full h-full card-body grid grid-cols-2"></div>
             </div>
           </div>
 
