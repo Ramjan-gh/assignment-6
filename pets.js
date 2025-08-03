@@ -194,47 +194,71 @@ const displayDetails = (id) => {
   if (dialog) dialog.showModal();
 };
 
+
+
+
+const likedPetIds = new Set();
+
 // loadLiked
 const loadLiked = (id) => {
-  fetch(`https://openapi.programming-hero.com/api/peddy/pet/${id}`)
-    .then((res) => res.json())
-    .then((data) => likedCardsAppend(data.petData))
-    .catch((err) => console.log(err));
+  const likedDiv = document.getElementById("liked-div");
+const likeBtn = document.getElementById(`liked-${id}`);
+
+  if (likedPetIds.has(id)) {
+    // Second click → remove from liked list
+    likedPetIds.delete(id);
+    const cardToRemove = document.getElementById(`liked-card-${id}`);
+    if (cardToRemove) cardToRemove.remove();
+    
+     if (likeBtn)
+       likeBtn.querySelector("img")?.setAttribute("src", "images/like.png");
+  } else {
+    // First click → add to liked list
+    likedPetIds.add(id);
+
+    // Fetch and display the pet in liked section
+    fetch(`https://openapi.programming-hero.com/api/peddy/pet/${id}`)
+      .then((res) => res.json())
+      .then((data) => likedCardsAppend(data.petData))
+      .catch((err) => console.log(err));
+
+       if (likeBtn)
+         likeBtn.querySelector("img")?.setAttribute("src", "images/liked.png");
+  }
 };
 // likedCardsAppend
-const likedCardsAppend = (id) =>{
+const likedCardsAppend = (pet) => {
   const likedDiv = document.getElementById("liked-div");
   const card = document.createElement("div");
+  card.id = `liked-card-${pet.petId}`; // Give unique ID to each liked card
   card.classList.add("h-full");
   card.innerHTML = `
     <div class="card w-full bg-base-100 shadow-sm">
-  <div class="card-body">
-    <img class="rounded-xl" src=${id.image} />
-    <div class="flex justify-between">
-      <h2 class="text-3xl font-bold">${id.pet_name}</h2>
-      
+      <div class="card-body">
+        <img class="rounded-xl" src=${pet.image} />
+        <div class="flex justify-between">
+          <h2 class="text-3xl font-bold">${pet.pet_name}</h2>
+        </div>
+        <ul class="mt-6 flex flex-col gap-2 text-xs">
+          <li class="flex items-center gap-4">
+            <img class="h-[20px]" src="images/category.png"/>
+            <p class="text-[16px]">${pet.breed}</p>
+          </li>
+          <li class="flex items-center gap-4">
+            <img class="h-[20px]" src="images/dob.png"/>
+            <p class="text-[16px]">${pet.date_of_birth}</p>
+          </li>
+          <li class="flex items-center gap-4">
+            <img class="h-[20px]" src="images/gender.png"/>
+            <p class="text-[16px]">${pet.gender}</p>
+          </li>
+          <li class="flex items-center gap-4">
+            <img class="h-[20px]" src="images/price.png"/>
+            <p class="text-[16px]">${pet.price}$</p>
+          </li>
+        </ul>
+      </div>
     </div>
-    <ul class="mt-6 flex flex-col gap-2 text-xs">
-      <li class="flex items-center gap-4">
-        <img class="h-[20px]" src="images/category.png"/>
-        <p class="text-[16px]">${id.breed}</p>
-      </li>
-      <li class="flex items-center gap-4">
-        <img class="h-[20px]" src="images/dob.png"/>
-        <p class="text-[16px]">${id.date_of_birth}</p>
-      </li>
-      <li class="flex items-center gap-4">
-        <img class="h-[20px]" src="images/gender.png"/>
-        <p class="text-[16px]">${id.gender}</p>
-      </li>
-      <li class="flex items-center gap-4">
-        <img class="h-[20px]" src="images/price.png"/>
-        <p class="text-[16px]">${id.price}$</p>
-      </li>
-    </ul>
-  </div>
-</div>
   `;
-
-likedDiv.append(card)
-} 
+  likedDiv.appendChild(card);
+};
