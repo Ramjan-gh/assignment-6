@@ -40,7 +40,7 @@ const displayCategories = (categories) => {
   categories.forEach((element) => {
     const buttonContainer = document.createElement("div");
     buttonContainer.innerHTML = `
-        <button onclick="loadCategoryPets('${element.category.toLowerCase()}')" id="btn-${element.category.toLowerCase()}" class="btn w-[312px] lg:w-[300px] md:w-[155px] h-[104px] rounded-xl">
+        <button onclick="loadCategoryPets('${element.category.toLowerCase()}')" id="btn-${element.category.toLowerCase()}" class="btn w-[312px] lg:w-[300px] md:w-[155px] h-[104px] rounded">
         <div class="flex items-center gap-4">
         <img src="${element.category_icon}" alt="${
       element.category
