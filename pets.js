@@ -129,7 +129,7 @@ const displayPets = (pets) => {
     <hr class="text-black/10 mt-4">
     <div class="mt-4 flex justify-between">
       <button onclick="loadLiked(${element.petId})" id="liked-${element.petId}" class="btn rounded-lg "><img class="scale-50" src="images/like.png"></button>
-      <button class="btn rounded-lg text-[rgba(14,122,129,1)] font-bold">Adopt</button>
+      <button onclick="loadAdopted(${element.petId})" class="btn rounded-lg text-[rgba(14,122,129,1)] font-bold">Adopt</button>
       <button onclick="loadDetails(${element.petId})" id="details" class="btn rounded-lg text-[rgba(14,122,129,1)] font-bold">Details</button>
     </div>
   </div>
@@ -262,3 +262,72 @@ const likedCardsAppend = (pet) => {
   `;
   likedDiv.appendChild(card);
 };
+
+
+// loadAdopted
+const loadAdopted = (id) => {
+  // Save to localStorage
+  let adopted = JSON.parse(localStorage.getItem("adoptedPets")) || [];
+  if (!adopted.includes(id)) {
+    adopted.push(id);
+    localStorage.setItem("adoptedPets", JSON.stringify(adopted));
+  }
+
+  // Optional: Show a visual confirmation immediately
+  fetch(`https://openapi.programming-hero.com/api/peddy/pet/${id}`)
+    .then((res) => res.json())
+    .then((data) => displayAdoptedPets(data.petData))
+    .catch((err) => console.log(err));
+};
+
+
+const displayAdoptedPets = (pet) => {
+  // console.log(pet);
+    const adoptedDiv = document.getElementById("adopted-pets");
+    if (!adoptedDiv) return;
+  const card = document.createElement("div");
+  card.innerHTML = `
+    <div class="card w-full bg-base-100 shadow-sm">
+      <div class="card-body">
+        <img class="rounded-xl" src=${pet.image} />
+        <div class="flex justify-between">
+          <h2 class="text-3xl font-bold">${pet.pet_name}</h2>
+        </div>
+        <ul class="mt-6 flex flex-col gap-2 text-xs">
+          <li class="flex items-center gap-4">
+            <img class="h-[20px]" src="images/category.png"/>
+            <p class="text-[16px]">${pet.breed}</p>
+          </li>
+          <li class="flex items-center gap-4">
+            <img class="h-[20px]" src="images/dob.png"/>
+            <p class="text-[16px]">${pet.date_of_birth}</p>
+          </li>
+          <li class="flex items-center gap-4">
+            <img class="h-[20px]" src="images/gender.png"/>
+            <p class="text-[16px]">${pet.gender}</p>
+          </li>
+          <li class="flex items-center gap-4">
+            <img class="h-[20px]" src="images/price.png"/>
+            <p class="text-[16px]">${pet.price}$</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  `;
+  adoptedDiv.append(card);
+};
+
+// Load all adopted pets when adopted-pets.html loads
+window.addEventListener("DOMContentLoaded", () => {
+  const adopted = JSON.parse(localStorage.getItem("adoptedPets")) || [];
+
+  adopted.forEach(id => {
+    fetch(`https://openapi.programming-hero.com/api/peddy/pet/${id}`)
+      .then(res => res.json())
+      .then(data => {
+        displayAdoptedPets(data.petData);
+      })
+      .catch(err => console.error("Error loading adopted pet:", err));
+  });
+});
+
